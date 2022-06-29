@@ -1,12 +1,16 @@
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     game.over(false)
 })
+sprites.onCreated(SpriteKind.Food, function (sprite) {
+    starhere = 1
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     game.over(true)
 })
 let starlocy = 0
 let starlocx = 0
 let mySprite2: Sprite = null
+let starhere = 0
 let location: Sprite = null
 info.setScore(0)
 scene.setBackgroundImage(img`
@@ -170,6 +174,32 @@ let projectile = sprites.createProjectileFromSprite(img`
     `, location, 50, 50)
 projectile.setBounceOnWall(true)
 projectile.startEffect(effects.trail)
+game.onUpdate(function () {
+    if (game.runtime() < 20999 && game.runtime() > 20001 && starhere == 0) {
+        mySprite2 = sprites.create(img`
+            . . . . . . . 5 5 . . . . . . . 
+            . . . . . . 5 5 5 . . . . . . . 
+            . . . . . 5 5 5 5 . . . . . . . 
+            . . . . . 5 5 5 5 5 . . . . . . 
+            . . . . 5 5 5 5 5 5 5 . . . . . 
+            5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . 5 5 5 5 5 5 5 5 5 5 5 5 5 . . 
+            . . 5 5 5 5 5 5 5 5 5 5 5 . . . 
+            . . 5 5 5 5 5 5 5 5 5 5 . . . . 
+            . . . 5 5 5 5 5 5 5 5 5 . . . . 
+            . . . 5 5 5 5 5 5 5 5 5 . . . . 
+            . . 5 5 5 5 5 5 5 5 5 5 . . . . 
+            . . 5 5 5 5 5 5 5 5 5 5 5 . . . 
+            . . 5 5 5 5 5 5 5 5 5 5 5 5 . . 
+            . 5 5 5 5 . . . . . 5 5 5 5 . . 
+            . 5 5 . . . . . . . . . 5 5 5 . 
+            `, SpriteKind.Food)
+        starlocx = randint(0, scene.screenWidth())
+        starlocy = randint(0, scene.screenHeight())
+        mySprite2.x = starlocx
+        mySprite2.y = starlocy
+    }
+})
 game.onUpdateInterval(5000, function () {
     projectile = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
@@ -194,31 +224,4 @@ game.onUpdateInterval(5000, function () {
 })
 game.onUpdateInterval(1000, function () {
     info.changeScoreBy(1)
-})
-forever(function () {
-    if (game.runtime() == 2000) {
-        mySprite2 = sprites.create(img`
-            . . . . . . . 5 5 . . . . . . . 
-            . . . . . . 5 5 5 . . . . . . . 
-            . . . . . 5 5 5 5 . . . . . . . 
-            . . . . . 5 5 5 5 5 . . . . . . 
-            . . . . 5 5 5 5 5 5 5 . . . . . 
-            5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
-            . 5 5 5 5 5 5 5 5 5 5 5 5 5 . . 
-            . . 5 5 5 5 5 5 5 5 5 5 5 . . . 
-            . . 5 5 5 5 5 5 5 5 5 5 . . . . 
-            . . . 5 5 5 5 5 5 5 5 5 . . . . 
-            . . . 5 5 5 5 5 5 5 5 5 . . . . 
-            . . 5 5 5 5 5 5 5 5 5 5 . . . . 
-            . . 5 5 5 5 5 5 5 5 5 5 5 . . . 
-            . . 5 5 5 5 5 5 5 5 5 5 5 5 . . 
-            . 5 5 5 5 . . . . . 5 5 5 5 . . 
-            . 5 5 . . . . . . . . . 5 5 5 . 
-            `, SpriteKind.Food)
-        starlocx = randint(0, scene.screenWidth())
-        starlocy = randint(0, scene.screenHeight())
-        mySprite2.x = starlocx
-        mySprite2.y = starlocy
-        break;
-    }
 })
